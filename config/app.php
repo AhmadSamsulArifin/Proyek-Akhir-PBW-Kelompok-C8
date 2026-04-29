@@ -1,5 +1,8 @@
 <?php
-define('BASE_URL', 'http://localhost/mahakam');
+
+$env = parse_ini_file(dirname(__DIR__) . '/.env');
+
+define('BASE_URL', $env['BASE_URL']);
 define('BASE_PATH', dirname(__DIR__));
 define('UPLOAD_PATH', BASE_PATH . '/public/uploads/');
 define('UPLOAD_URL', BASE_URL . '/public/uploads/');
@@ -15,6 +18,7 @@ spl_autoload_register(function ($class) {
         BASE_PATH . '/app/models/' . $class . '.php',
         BASE_PATH . '/app/controllers/' . $class . '.php',
     ];
+
     foreach ($paths as $path) {
         if (file_exists($path)) {
             require_once $path;
@@ -94,9 +98,11 @@ function starRating(int $rating): string
 function fotoWisata(string $foto): string
 {
     $path = UPLOAD_PATH . $foto;
+
     if (!empty($foto) && file_exists($path)) {
         return UPLOAD_URL . $foto;
     }
+
     return BASE_URL . '/public/img/placeholder.jpg';
 }
 
@@ -113,6 +119,8 @@ function badgeStatus(string $status): string
         'nonaktif'  => 'secondary',
         'disetujui' => 'success',
     ];
+
     $color = $map[$status] ?? 'secondary';
+
     return "<span class='badge bg-{$color}'>" . ucfirst($status) . "</span>";
 }
